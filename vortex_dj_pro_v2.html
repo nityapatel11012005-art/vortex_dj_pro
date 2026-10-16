@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VORTEX DJ-X v2 // Pro Dual-Deck DJ Workstation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Orbitron', 'monospace'],
+            tech: ['Rajdhani', 'sans-serif'],
+          },
+          colors: {
+            deckA: {
+              DEFAULT: '#00f2fe',
+              glow: 'rgba(0, 242, 254, 0.45)',
+              dim: 'rgba(0, 242, 254, 0.12)',
+              border: '#00c3ff',
+            },
+            deckB: {
+              DEFAULT: '#ff5e36',
+              glow: 'rgba(255, 94, 54, 0.45)',
+              dim: 'rgba(255, 94, 54, 0.12)',
+              border: '#ff7733',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #07090d;
+      background-image: 
+        radial-gradient(circle at 50% 10%, rgba(30, 41, 59, 0.5) 0%, transparent 70%),
+        radial-gradient(circle at 10% 90%, rgba(0, 242, 254, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(255, 94, 54, 0.05) 0%, transparent 50%),
+        linear-gradient(to bottom, #07090e, #0c0f17);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Grooved vinyl record realistic texture */
+    .vinyl-grooves {
+      background: radial-gradient(
+        circle,
+        #111 0%,
+        #171717 22%,
+        #0a0a0a 26%,
+        #1c1c1c 30%,
+        #0d0d0d 44%,
+        #242424 47%,
+        #080808 52%,
+        #1a1a1a 70%,
+        #0a0a0a 73%,
+        #181818 88%,
+        #050505 100%
+      );
+      box-shadow: 
+        inset 0 0 30px rgba(0,0,0,0.95),
+        0 12px 32px rgba(0,0,0,0.85);
+    }
+
+    .vinyl-sheen {
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.09) 0%,
+        transparent 38%,
+        rgba(255,255,255,0.14) 50%,
+        transparent 62%,
+        rgba(255,255,255,0.07) 100%
+      );
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+    }
+    input[type=range]:focus {
+      outline: none;
+    }
+
+    /* Horizontal Crossfader Thumb */
+    .crossfader-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 48px;
+      width: 28px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #f8fafc 0%, #94a3b8 50%, #334155 100%);
+      border: 1px solid #ffffff;
+      box-shadow: 0 0 14px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.9);
+      cursor: ew-resize;
+    }
+
+    /* Vertical Faders */
+    .vertical-slider {
+      -webkit-appearance: slider-vertical;
+      writing-mode: bt-lr;
+      cursor: ns-resize;
+    }
+    
+    .fader-vertical::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 20px;
+      width: 42px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #e2e8f0 0%, #64748b 50%, #1e293b 100%);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.8);
+      cursor: ns-resize;
+    }
+
+    .led-cyan {
+      box-shadow: 0 0 16px #00f2fe;
+    }
+    .led-orange {
+      box-shadow: 0 0 16px #ff5e36;
+    }
+    .led-purple {
+      box-shadow: 0 0 16px #c084fc;
+    }
+  </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col justify-between overflow-x-hidden p-2 sm:p-3 font-sans select-none">
+
+  <header class="w-full max-w-[1550px] mx-auto mb-2 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-2xl">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 via-purple-600 to-orange-500 p-0.5 shadow-lg flex items-center justify-center">
+        <div class="w-full h-full bg-slate-950 rounded-[7px] flex items-center justify-center">
+          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" stroke-width="2"/>
+            <circle cx="12" cy="12" r="3.5" stroke-width="2"/>
+            <path stroke-linecap="round" stroke-width="2" d="M12 3v3m0 12v3M3 12h3m12 0h3"/>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <h1 class="text-xl font-mono font-black tracking-wider text-white flex items-center gap-2">
+          VORTEX <span class="text-xs px-2 py-0.5 rounded bg-purple-500/20 text-purple-400 border border-purple-500/40 font-mono font-bold tracking-widest">DJ-X v2</span>
+        </h1>
+        <p class="text-[11px] text-slate-400 font-tech uppercase tracking-widest">DSP FX Processor Edition • Echo / Reverb / Flanger</p>
+      </div>
+    </div>
+
+    <!-- Master Controls & Audio Engine Status -->
+    <div class="flex items-center gap-3 sm:gap-6 flex-wrap">
+      <div class="flex items-center gap-2.5 bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-lg">
+        <span class="text-[11px] font-mono uppercase text-slate-400">Master</span>
+        <input id="masterVolume" type="range" min="0" max="1.4" step="0.01" value="1.0" class="w-20 sm:w-28 accent-emerald-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg" title="Master Volume">
+        <span id="masterVolText" class="text-xs font-mono text-emerald-400 w-9 text-right font-bold">100%</span>
+      </div>
+
+      <div id="engineStatus" class="flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-tech font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="hidden sm:inline">WEB AUDIO DSP ACTIVE</span>
+        <span class="sm:hidden">ACTIVE</span>
+      </div>
+
+      <button id="btnQuickDemo" class="px-3 py-1.5 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-orange-500/20 hover:from-cyan-500/40 hover:to-orange-500/40 border border-slate-700 text-xs font-tech font-bold rounded-lg tracking-wider transition-all flex items-center gap-1.5 text-slate-200 shadow">
+        <svg class="w-3.5 h-3.5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm-1 11V7l5 3-5 3z"/>
+        </svg>
+        RE-GEN SYNTHS
+      </button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-[1550px] mx-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch">
+    
+    <!-- ============================================== -->
+    <!-- DECK A (CYAN THEME + FX RACK)                 -->
+    <!-- ============================================== -->
+    <section class="lg:col-span-4 bg-slate-900/90 rounded-2xl border-2 border-cyan-500/40 p-3 sm:p-4 flex flex-col justify-between shadow-2xl relative overflow-hidden backdrop-blur">
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-cyan-500 to-transparent"></div>
+      
+      <!-- Top Track Info -->
+      <div class="flex items-start justify-between gap-2 mb-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-400 font-mono text-xs font-black tracking-wider border border-cyan-400/50">DECK A</span>
+            <span id="deckA-bpm" class="text-sm font-mono font-bold text-cyan-300">124.0 BPM</span>
+            <button id="deckA-syncBtn" class="px-1.5 py-0.5 bg-slate-800 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 text-[10px] font-mono rounded border border-slate-700 transition" title="Auto Sync BPM to Deck B">SYNC</button>
+          </div>
+          <p id="deckA-trackTitle" class="text-sm font-bold text-white tracking-wide mt-1 truncate max-w-[190px]" title="Electro Cyber Club (Synth)">Electro Cyber (A-Mix)</p>
+          <span class="text-[11px] text-cyan-400/80 font-mono" id="deckA-time">00:00 / 00:00</span>
+        </div>
+
+        <label class="cursor-pointer px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 border border-slate-700 rounded-lg text-xs font-tech font-semibold flex items-center gap-1 transition shadow">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+          <span>LOAD</span>
+          <input type="file" id="deckA-fileInput" accept="audio/*" class="hidden">
+        </label>
+      </div>
+
+      <!-- Waveform Canvas -->
+      <div class="w-full h-12 bg-slate-950 rounded-lg border border-slate-800 relative overflow-hidden mb-2">
+        <canvas id="deckA-waveCanvas" class="w-full h-full block"></canvas>
+        <div id="deckA-progress" class="absolute top-0 left-0 h-full w-0.5 bg-cyan-400 shadow-[0_0_8px_#00f2fe] pointer-events-none"></div>
+      </div>
+
+      <!-- TurnTable & Pitch Fader -->
+      <div class="flex items-center justify-between gap-3 my-1">
+        <div class="flex-1 flex justify-center items-center py-1">
+          <div id="deckA-platterContainer" class="relative w-44 h-44 sm:w-48 sm:h-48 cursor-grab active:cursor-grabbing group">
+            <div id="deckA-vinyl" class="w-full h-full rounded-full vinyl-grooves p-3 relative transition-transform shadow-2xl flex items-center justify-center">
+              <div class="absolute inset-0 rounded-full vinyl-sheen pointer-events-none"></div>
+              <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-cyan-600 via-cyan-900 to-slate-950 border-4 border-cyan-400/80 flex flex-col items-center justify-center text-center z-10 shadow-inner">
+                <span class="text-[9px] font-mono text-cyan-200 tracking-widest font-black">VORTEX</span>
+                <span class="text-[11px] font-bold text-white font-tech">SIDE A</span>
+                <div class="w-2 h-2 rounded-full bg-slate-950 border border-cyan-400 mt-1"></div>
+              </div>
+              <div class="absolute top-2 w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f2fe]"></div>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="bg-black/80 text-cyan-400 text-[10px] font-mono px-2 py-0.5 rounded border border-cyan-500/40 uppercase">Scratch</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vertical Pitch Slider -->
+        <div class="flex flex-col items-center bg-slate-950/80 border border-slate-800/90 p-2 rounded-xl">
+          <span class="text-[9px] font-mono text-cyan-400 font-bold mb-1">PITCH</span>
+          <span id="deckA-pitchValue" class="text-[10px] font-mono text-slate-300 font-semibold mb-1">0.0%</span>
+          <div class="h-28 flex items-center justify-center py-1">
+            <input id="deckA-pitchSlider" type="range" min="0.8" max="1.2" step="0.001" value="1.0" class="vertical-slider fader-vertical h-24 accent-cyan-400" title="Tempo / Pitch Fader (+/- 20%)">
+          </div>
+          <button id="deckA-pitchReset" class="mt-1 text-[9px] font-mono px-1 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700">0%</button>
+        </div>
+      </div>
+
+      <!-- ADVANCED FX RACK FOR DECK A -->
+      <div class="bg-slate-950/90 border border-cyan-500/30 rounded-xl p-2.5 my-1.5 shadow-inner">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            <span class="text-[10px] font-mono font-bold tracking-wider text-cyan-300">DSP FX PROCESSOR</span>
+          </div>
+          <button id="deckA-fxToggle" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider border border-slate-700 bg-slate-800 text-slate-400 transition flex items-center gap-1">
+            <span id="deckA-fxLed" class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+            <span id="deckA-fxToggleText">FX OFF</span>
+          </button>
+        </div>
+
+        <!-- FX Selector Tabs -->
+        <div class="grid grid-cols-3 gap-1 mb-2">
+          <button id="deckA-fxTab-echo" class="py-1 text-[10px] font-tech font-bold rounded bg-cyan-500/30 text-cyan-300 border border-cyan-400/50 transition">ECHO</button>
+          <button id="deckA-fxTab-reverb" class="py-1 text-[10px] font-tech font-bold rounded bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition">REVERB</button>
+          <button id="deckA-fxTab-flanger" class="py-1 text-[10px] font-tech font-bold rounded bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition">FLANGER</button>
+        </div>
+
+        <!-- FX Parameter Sliders -->
+        <div class="grid grid-cols-2 gap-3 text-[10px] font-mono">
+          <div class="space-y-1">
+            <div class="flex justify-between text-slate-400">
+              <span id="deckA-paramLabel">DELAY TIME</span>
+              <span id="deckA-paramVal" class="text-cyan-300">300ms</span>
+            </div>
+            <input id="deckA-fxParam" type="range" min="0.05" max="0.8" step="0.01" value="0.3" class="w-full accent-cyan-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-slate-400">
+              <span>WET / DRY</span>
+              <span id="deckA-mixVal" class="text-cyan-300">50%</span>
+            </div>
+            <input id="deckA-fxMix" type="range" min="0" max="1" step="0.01" value="0.5" class="w-full accent-cyan-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+        </div>
+      </div>
+
+      <!-- Hot Cues & Transport -->
+      <div class="space-y-1.5">
+        <div class="grid grid-cols-3 gap-1.5">
+          <button id="deckA-hotcue1" class="py-1 bg-slate-950 hover:bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-tech font-bold text-xs rounded transition flex flex-col items-center">
+            <span>CUE 1</span><span class="text-[8px] text-slate-500 font-mono">0.0s</span>
+          </button>
+          <button id="deckA-hotcue2" class="py-1 bg-slate-950 hover:bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-tech font-bold text-xs rounded transition flex flex-col items-center">
+            <span>CUE 2</span><span class="text-[8px] text-slate-500 font-mono">2.0s</span>
+          </button>
+          <button id="deckA-hotcue3" class="py-1 bg-slate-950 hover:bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-tech font-bold text-xs rounded transition flex flex-col items-center">
+            <span>CUE 3</span><span class="text-[8px] text-slate-500 font-mono">4.0s</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-4 gap-2 pt-1">
+          <button id="deckA-cueBtn" class="py-2.5 bg-slate-800 hover:bg-slate-700 active:bg-cyan-500/40 text-cyan-300 font-mono font-black text-xs rounded-xl border border-cyan-500/40 transition active:scale-95 shadow">
+            CUE
+          </button>
+          <button id="deckA-playBtn" class="col-span-2 py-2.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-mono font-black text-xs rounded-xl border border-emerald-500/40 transition active:scale-95 flex items-center justify-center gap-2 shadow">
+            <svg id="deckA-playIcon" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span id="deckA-playText">PLAY</span>
+          </button>
+          <button id="deckA-loopBtn" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono font-bold text-xs rounded-xl border border-slate-700 transition active:scale-95 flex flex-col items-center justify-center">
+            <span>LOOP</span>
+            <span class="text-[8px] text-cyan-400">4 BEATS</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- CENTER MIXER & EQUALIZER                       -->
+    <!-- ============================================== -->
+    <section class="lg:col-span-4 bg-slate-950/95 rounded-2xl border border-slate-800 p-3 flex flex-col justify-between shadow-2xl relative">
+      <div class="text-center pb-1.5 border-b border-slate-800 flex items-center justify-between">
+        <span class="text-[11px] font-mono text-cyan-400 font-bold">CH 1</span>
+        <span class="text-xs font-tech font-black tracking-widest text-slate-300 uppercase">2-CH PRECISION MIXER</span>
+        <span class="text-[11px] font-mono text-orange-400 font-bold">CH 2</span>
+      </div>
+
+      <!-- 3-Band Equalizer -->
+      <div class="grid grid-cols-2 gap-3 py-2">
+        <!-- Deck A EQ -->
+        <div class="space-y-2 flex flex-col items-center bg-slate-900/60 p-2.5 rounded-xl border border-cyan-500/20">
+          <div class="text-[10px] font-mono text-cyan-400 tracking-wider font-semibold">DECK A EQ</div>
+          
+          <div class="flex flex-col items-center w-full">
+            <div class="flex justify-between w-full px-1 text-[9px] font-tech text-slate-400">
+              <span>HI</span><span id="deckA-eqHighVal" class="font-mono text-cyan-300">0dB</span>
+            </div>
+            <input id="deckA-eqHigh" type="range" min="-24" max="12" step="0.5" value="0" class="w-full accent-cyan-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+
+          <div class="flex flex-col items-center w-full">
+            <div class="flex justify-between w-full px-1 text-[9px] font-tech text-slate-400">
+              <span>MID</span><span id="deckA-eqMidVal" class="font-mono text-cyan-300">0dB</span>
+            </div>
+            <input id="deckA-eqMid" type="range" min="-24" max="12" step="0.5" value="0" class="w-full accent-cyan-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+
+          <div class="flex flex-col items-center w-full">
+            <div class="flex justify-between w-full px-1 text-[9px] font-tech text-slate-400">
+              <span>LOW</span><span id="deckA-eqLowVal" class="font-mono text-cyan-300">0dB</span>
+            </div>
+            <input id="deckA-eqLow" type="range" min="-24" max="12" step="0.5" value="0" class="w-full accent-cyan-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+        </div>
+
+        <!-- Deck B EQ -->
+        <div class="space-y-2 flex flex-col items-center bg-slate-900/60 p-2.5 rounded-xl border border-orange-500/20">
+          <div class="text-[10px] font-mono text-orange-400 tracking-wider font-semibold">DECK B EQ</div>
+          
+          <div class="flex flex-col items-center w-full">
+            <div class="flex justify-between w-full px-1 text-[9px] font-tech text-slate-400">
+              <span>HI</span><span id="deckB-eqHighVal" class="font-mono text-orange-300">0dB</span>
+            </div>
+            <input id="deckB-eqHigh" type="range" min="-24" max="12" step="0.5" value="0" class="w-full accent-orange-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+
+          <div class="flex flex-col items-center w-full">
+            <div class="flex justify-between w-full px-1 text-[9px] font-tech text-slate-400">
+              <span>MID</span><span id="deckB-eqMidVal" class="font-mono text-orange-300">0dB</span>
+            </div>
+            <input id="deckB-eqMid" type="range" min="-24" max="12" step="0.5" value="0" class="w-full accent-orange-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+
+          <div class="flex flex-col items-center w-full">
+            <div class="flex justify-between w-full px-1 text-[9px] font-tech text-slate-400">
+              <span>LOW</span><span id="deckB-eqLowVal" class="font-mono text-orange-300">0dB</span>
+            </div>
+            <input id="deckB-eqLow" type="range" min="-24" max="12" step="0.5" value="0" class="w-full accent-orange-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+        </div>
+      </div>
+
+      <!-- Channel Level Faders and Peak Meters -->
+      <div class="grid grid-cols-2 gap-3 py-1">
+        <!-- Deck A Level & Meter -->
+        <div class="flex items-center justify-center gap-3 bg-slate-900/40 p-2 rounded-xl border border-slate-800">
+          <div class="h-24 flex items-center justify-center">
+            <input id="deckA-volSlider" type="range" min="0" max="1" step="0.01" value="0.85" class="vertical-slider fader-vertical h-20 accent-cyan-400" title="Channel A Level Fader">
+          </div>
+          <div class="w-3.5 h-20 bg-black rounded p-0.5 flex flex-col justify-end gap-0.5 border border-slate-800">
+            <div id="deckA-vu-red" class="h-1.5 w-full bg-red-950 transition-colors"></div>
+            <div id="deckA-vu-yellow" class="h-2 w-full bg-yellow-950 transition-colors"></div>
+            <div id="deckA-vu-green3" class="h-3.5 w-full bg-emerald-950 transition-colors"></div>
+            <div id="deckA-vu-green2" class="h-3.5 w-full bg-emerald-950 transition-colors"></div>
+            <div id="deckA-vu-green1" class="h-3.5 w-full bg-emerald-950 transition-colors"></div>
+          </div>
+        </div>
+
+        <!-- Deck B Level & Meter -->
+        <div class="flex items-center justify-center gap-3 bg-slate-900/40 p-2 rounded-xl border border-slate-800">
+          <div class="w-3.5 h-20 bg-black rounded p-0.5 flex flex-col justify-end gap-0.5 border border-slate-800">
+            <div id="deckB-vu-red" class="h-1.5 w-full bg-red-950 transition-colors"></div>
+            <div id="deckB-vu-yellow" class="h-2 w-full bg-yellow-950 transition-colors"></div>
+            <div id="deckB-vu-green3" class="h-3.5 w-full bg-emerald-950 transition-colors"></div>
+            <div id="deckB-vu-green2" class="h-3.5 w-full bg-emerald-950 transition-colors"></div>
+            <div id="deckB-vu-green1" class="h-3.5 w-full bg-emerald-950 transition-colors"></div>
+          </div>
+          <div class="h-24 flex items-center justify-center">
+            <input id="deckB-volSlider" type="range" min="0" max="1" step="0.01" value="0.85" class="vertical-slider fader-vertical h-20 accent-orange-400" title="Channel B Level Fader">
+          </div>
+        </div>
+      </div>
+
+      <!-- Crossfader Section -->
+      <div class="pt-1.5 border-t border-slate-800">
+        <div class="flex justify-between items-center text-[10px] font-mono mb-1">
+          <span class="text-cyan-400 font-bold">◄ DECK A</span>
+          <span class="text-slate-500 font-tech uppercase">CROSSFADER</span>
+          <span class="text-orange-400 font-bold">DECK B ►</span>
+        </div>
+
+        <div class="relative w-full px-1 py-1.5 bg-slate-900 rounded-xl border border-slate-800">
+          <input id="crossfader" type="range" min="0" max="1" step="0.005" value="0.5" class="w-full crossfader-input h-10 cursor-pointer" title="Crossfader (Deck A <-> Deck B)">
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0.5 h-6 bg-slate-700 pointer-events-none"></div>
+        </div>
+
+        <div class="flex justify-between items-center mt-1 px-1">
+          <button id="cfLeft" class="text-[10px] font-tech text-cyan-400 hover:underline">100% A</button>
+          <button id="cfCenter" class="text-[10px] font-tech text-slate-400 hover:text-white">CENTER (50/50)</button>
+          <button id="cfRight" class="text-[10px] font-tech text-orange-400 hover:underline">100% B</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- DECK B (ORANGE THEME + FX RACK)               -->
+    <!-- ============================================== -->
+    <section class="lg:col-span-4 bg-slate-900/90 rounded-2xl border-2 border-orange-500/40 p-3 sm:p-4 flex flex-col justify-between shadow-2xl relative overflow-hidden backdrop-blur">
+      <div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-orange-400 via-orange-500 to-transparent"></div>
+      
+      <!-- Top Track Info -->
+      <div class="flex items-start justify-between gap-2 mb-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-orange-400/20 text-orange-400 font-mono text-xs font-black tracking-wider border border-orange-400/50">DECK B</span>
+            <span id="deckB-bpm" class="text-sm font-mono font-bold text-orange-300">120.0 BPM</span>
+            <button id="deckB-syncBtn" class="px-1.5 py-0.5 bg-slate-800 hover:bg-orange-500/20 text-slate-300 hover:text-orange-300 text-[10px] font-mono rounded border border-slate-700 transition" title="Auto Sync BPM to Deck A">SYNC</button>
+          </div>
+          <p id="deckB-trackTitle" class="text-sm font-bold text-white tracking-wide mt-1 truncate max-w-[190px]" title="Deep Sunset Groove (Synth)">Deep Sunset (B-Mix)</p>
+          <span class="text-[11px] text-orange-400/80 font-mono" id="deckB-time">00:00 / 00:00</span>
+        </div>
+
+        <label class="cursor-pointer px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-orange-400 hover:text-orange-300 border border-slate-700 rounded-lg text-xs font-tech font-semibold flex items-center gap-1 transition shadow">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+          <span>LOAD</span>
+          <input type="file" id="deckB-fileInput" accept="audio/*" class="hidden">
+        </label>
+      </div>
+
+      <!-- Waveform Canvas -->
+      <div class="w-full h-12 bg-slate-950 rounded-lg border border-slate-800 relative overflow-hidden mb-2">
+        <canvas id="deckB-waveCanvas" class="w-full h-full block"></canvas>
+        <div id="deckB-progress" class="absolute top-0 left-0 h-full w-0.5 bg-orange-400 shadow-[0_0_8px_#ff5e36] pointer-events-none"></div>
+      </div>
+
+      <!-- Pitch Fader & TurnTable -->
+      <div class="flex items-center justify-between gap-3 my-1">
+        <!-- Vertical Pitch Slider -->
+        <div class="flex flex-col items-center bg-slate-950/80 border border-slate-800/90 p-2 rounded-xl">
+          <span class="text-[9px] font-mono text-orange-400 font-bold mb-1">PITCH</span>
+          <span id="deckB-pitchValue" class="text-[10px] font-mono text-slate-300 font-semibold mb-1">0.0%</span>
+          <div class="h-28 flex items-center justify-center py-1">
+            <input id="deckB-pitchSlider" type="range" min="0.8" max="1.2" step="0.001" value="1.0" class="vertical-slider fader-vertical h-24 accent-orange-400" title="Tempo / Pitch Fader (+/- 20%)">
+          </div>
+          <button id="deckB-pitchReset" class="mt-1 text-[9px] font-mono px-1 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700">0%</button>
+        </div>
+
+        <div class="flex-1 flex justify-center items-center py-1">
+          <div id="deckB-platterContainer" class="relative w-44 h-44 sm:w-48 sm:h-48 cursor-grab active:cursor-grabbing group">
+            <div id="deckB-vinyl" class="w-full h-full rounded-full vinyl-grooves p-3 relative transition-transform shadow-2xl flex items-center justify-center">
+              <div class="absolute inset-0 rounded-full vinyl-sheen pointer-events-none"></div>
+              <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-orange-600 via-orange-900 to-slate-950 border-4 border-orange-400/80 flex flex-col items-center justify-center text-center z-10 shadow-inner">
+                <span class="text-[9px] font-mono text-orange-200 tracking-widest font-black">VORTEX</span>
+                <span class="text-[11px] font-bold text-white font-tech">SIDE B</span>
+                <div class="w-2 h-2 rounded-full bg-slate-950 border border-orange-400 mt-1"></div>
+              </div>
+              <div class="absolute top-2 w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_8px_#ff5e36]"></div>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="bg-black/80 text-orange-400 text-[10px] font-mono px-2 py-0.5 rounded border border-orange-500/40 uppercase">Scratch</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADVANCED FX RACK FOR DECK B -->
+      <div class="bg-slate-950/90 border border-orange-500/30 rounded-xl p-2.5 my-1.5 shadow-inner">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+            <span class="text-[10px] font-mono font-bold tracking-wider text-orange-300">DSP FX PROCESSOR</span>
+          </div>
+          <button id="deckB-fxToggle" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider border border-slate-700 bg-slate-800 text-slate-400 transition flex items-center gap-1">
+            <span id="deckB-fxLed" class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+            <span id="deckB-fxToggleText">FX OFF</span>
+          </button>
+        </div>
+
+        <!-- FX Selector Tabs -->
+        <div class="grid grid-cols-3 gap-1 mb-2">
+          <button id="deckB-fxTab-echo" class="py-1 text-[10px] font-tech font-bold rounded bg-orange-500/30 text-orange-300 border border-orange-400/50 transition">ECHO</button>
+          <button id="deckB-fxTab-reverb" class="py-1 text-[10px] font-tech font-bold rounded bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition">REVERB</button>
+          <button id="deckB-fxTab-flanger" class="py-1 text-[10px] font-tech font-bold rounded bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition">FLANGER</button>
+        </div>
+
+        <!-- FX Parameter Sliders -->
+        <div class="grid grid-cols-2 gap-3 text-[10px] font-mono">
+          <div class="space-y-1">
+            <div class="flex justify-between text-slate-400">
+              <span id="deckB-paramLabel">DELAY TIME</span>
+              <span id="deckB-paramVal" class="text-orange-300">300ms</span>
+            </div>
+            <input id="deckB-fxParam" type="range" min="0.05" max="0.8" step="0.01" value="0.3" class="w-full accent-orange-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-slate-400">
+              <span>WET / DRY</span>
+              <span id="deckB-mixVal" class="text-orange-300">50%</span>
+            </div>
+            <input id="deckB-fxMix" type="range" min="0" max="1" step="0.01" value="0.5" class="w-full accent-orange-400 h-1 bg-slate-800 rounded cursor-pointer">
+          </div>
+        </div>
+      </div>
+
+      <!-- Hot Cues & Transport -->
+      <div class="space-y-1.5">
+        <div class="grid grid-cols-3 gap-1.5">
+          <button id="deckB-hotcue1" class="py-1 bg-slate-950 hover:bg-orange-950/60 border border-orange-500/30 text-orange-300 font-tech font-bold text-xs rounded transition flex flex-col items-center">
+            <span>CUE 1</span><span class="text-[8px] text-slate-500 font-mono">0.0s</span>
+          </button>
+          <button id="deckB-hotcue2" class="py-1 bg-slate-950 hover:bg-orange-950/60 border border-orange-500/30 text-orange-300 font-tech font-bold text-xs rounded transition flex flex-col items-center">
+            <span>CUE 2</span><span class="text-[8px] text-slate-500 font-mono">2.0s</span>
+          </button>
+          <button id="deckB-hotcue3" class="py-1 bg-slate-950 hover:bg-orange-950/60 border border-orange-500/30 text-orange-300 font-tech font-bold text-xs rounded transition flex flex-col items-center">
+            <span>CUE 3</span><span class="text-[8px] text-slate-500 font-mono">4.0s</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-4 gap-2 pt-1">
+          <button id="deckB-loopBtn" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono font-bold text-xs rounded-xl border border-slate-700 transition active:scale-95 flex flex-col items-center justify-center">
+            <span>LOOP</span>
+            <span class="text-[8px] text-orange-400">4 BEATS</span>
+          </button>
+          <button id="deckB-playBtn" class="col-span-2 py-2.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-mono font-black text-xs rounded-xl border border-emerald-500/40 transition active:scale-95 flex items-center justify-center gap-2 shadow">
+            <svg id="deckB-playIcon" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span id="deckB-playText">PLAY</span>
+          </button>
+          <button id="deckB-cueBtn" class="py-2.5 bg-slate-800 hover:bg-slate-700 active:bg-orange-500/40 text-orange-300 font-mono font-black text-xs rounded-xl border border-orange-500/40 transition active:scale-95 shadow">
+            CUE
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Sampler Pads & Shortcuts -->
+  <footer class="w-full max-w-[1550px] mx-auto mt-2 bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div class="flex items-center gap-2">
+      <span class="font-tech uppercase tracking-wider text-slate-400 font-bold">DJ FX PADS:</span>
+      <div class="flex gap-1.5 flex-wrap">
+        <button id="sfx-airhorn" class="px-2.5 py-1 bg-slate-800 hover:bg-yellow-500/20 active:bg-yellow-500/50 text-yellow-300 border border-yellow-500/30 rounded font-mono font-bold transition">📣 AIR HORN</button>
+        <button id="sfx-laser" class="px-2.5 py-1 bg-slate-800 hover:bg-cyan-500/20 active:bg-cyan-500/50 text-cyan-300 border border-cyan-500/30 rounded font-mono font-bold transition">⚡ LASER</button>
+        <button id="sfx-subbomb" class="px-2.5 py-1 bg-slate-800 hover:bg-red-500/20 active:bg-red-500/50 text-red-300 border border-red-500/30 rounded font-mono font-bold transition">💣 808 DROP</button>
+        <button id="sfx-siren" class="px-2.5 py-1 bg-slate-800 hover:bg-purple-500/20 active:bg-purple-500/50 text-purple-300 border border-purple-500/30 rounded font-mono font-bold transition">🚨 SIREN</button>
+      </div>
+    </div>
+
+    <div class="text-[11px] text-slate-400 flex items-center gap-3 font-tech">
+      <span><kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">Space</kbd> Play A</span>
+      <span><kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">Enter</kbd> Play B</span>
+      <span><kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">◄ / ►</kbd> Crossfade</span>
+      <span><kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">E</kbd> FX A</span>
+      <span><kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">O</kbd> FX B</span>
+    </div>
+  </footer>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-cyan-500/50 text-cyan-300 px-4 py-2 rounded-xl shadow-2xl text-xs font-tech font-bold flex items-center gap-2 pointer-events-none">
+    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+    <span id="toastMsg">DSP Ready</span>
+  </div>
+
+  <audio id="audioA" loop preload="auto" crossorigin="anonymous"></audio>
+  <audio id="audioB" loop preload="auto" crossorigin="anonymous"></audio>
+
+  <script>
+    /* ==========================================================
+       VORTEX DJ-X v2: Advanced Web Audio DSP Processor
+       Echo (Delay+Filter), Reverb (Convolver), Flanger (LFO Sweep)
+       ========================================================== */
+
+    function showToast(msg, isOrange = false) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = msg;
+      toast.className = `fixed bottom-5 right-5 z-50 transform translate-y-0 opacity-100 transition-all duration-300 bg-slate-900 border ${isOrange ? 'border-orange-500/50 text-orange-300' : 'border-cyan-500/50 text-cyan-300'} px-4 py-2 rounded-xl shadow-2xl text-xs font-tech font-bold flex items-center gap-2 pointer-events-none`;
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2200);
+    }
+
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    /**
+     * Synthesize 4-bar DJ loop audio buffer and encode directly as a WAV Blob
+     */
+    function createSynthDJLoop(type = 'A') {
+      const sampleRate = 44100;
+      const bpm = type === 'A' ? 124 : 120;
+      const duration = (60 / bpm) * 16; // 4 bars
+      const numSamples = Math.floor(sampleRate * duration);
+      
+      const left = new Float32Array(numSamples);
+      const right = new Float32Array(numSamples);
+
+      const beatDuration = 60 / bpm;
+      const sixteenth = beatDuration / 4;
+
+      for (let i = 0; i < numSamples; i++) {
+        const t = i / sampleRate;
+        let sampleL = 0;
+        let sampleR = 0;
+
+        // Kick Drum
+        const beatFrac = (t % beatDuration) / beatDuration;
+        if (beatFrac < 0.22) {
+          const kickTime = beatFrac * beatDuration;
+          const kickPitch = 150 * Math.exp(-kickTime * 35) + (type === 'A' ? 48 : 42);
+          const kickAmp = Math.exp(-kickTime * 15);
+          const kickVal = Math.sin(2 * Math.PI * kickPitch * kickTime) * kickAmp;
+          sampleL += kickVal * 0.95;
+          sampleR += kickVal * 0.95;
+        }
+
+        // Snare / Clap
+        const barFrac = (t % (beatDuration * 2)) / (beatDuration * 2);
+        if (barFrac >= 0.5) {
+          const snareTime = (barFrac - 0.5) * (beatDuration * 2);
+          if (snareTime < 0.18) {
+            const noise = (Math.random() * 2 - 1) * Math.exp(-snareTime * 24);
+            const tone = Math.sin(2 * Math.PI * 220 * snareTime) * Math.exp(-snareTime * 30);
+            sampleL += (noise * 0.7 + tone * 0.3) * 0.65;
+            sampleR += (noise * 0.7 + tone * 0.3) * 0.65;
+          }
+        }
+
+        // Hi-Hats
+        const eighthFrac = (t % (beatDuration / 2)) / (beatDuration / 2);
+        if (eighthFrac >= 0.5) {
+          const hatTime = (eighthFrac - 0.5) * (beatDuration / 2);
+          if (hatTime < 0.05) {
+            const hatNoise = (Math.random() * 2 - 1) * Math.exp(-hatTime * 85) * 0.28;
+            sampleL += hatNoise * 0.8;
+            sampleR += hatNoise;
+          }
+        }
+
+        // Bassline Synth
+        const step = Math.floor(t / sixteenth) % 16;
+        const stepTime = (t % sixteenth);
+        let bassFreq = 55;
+        if (type === 'A') {
+          const noteMap = [55, 55, 65.4, 55, 73.4, 55, 65.4, 82.4, 55, 55, 65.4, 55, 87.3, 73.4, 65.4, 55];
+          bassFreq = noteMap[step];
+        } else {
+          const noteMap = [43.6, 43.6, 49.0, 49.0, 55.0, 55.0, 65.4, 55.0, 43.6, 43.6, 49.0, 49.0, 65.4, 73.4, 55.0, 49.0];
+          bassFreq = noteMap[step];
+        }
+
+        if (stepTime < sixteenth * 0.85) {
+          const bassEnv = Math.exp(-stepTime * 12);
+          const saw = (2 * ((t * bassFreq) % 1) - 1);
+          const sub = Math.sin(2 * Math.PI * (bassFreq / 2) * t);
+          const bassVal = (saw * 0.45 + sub * 0.55) * bassEnv * 0.5;
+          sampleL += bassVal;
+          sampleR += bassVal;
+        }
+
+        // Arp / Stabs
+        if (type === 'A') {
+          if ([2, 5, 10, 13].includes(step) && stepTime < 0.16) {
+            const stabEnv = Math.exp(-stepTime * 15);
+            const c1 = Math.sin(2 * Math.PI * 220 * t);
+            const c2 = Math.sin(2 * Math.PI * 261.63 * t);
+            const c3 = Math.sin(2 * Math.PI * 329.63 * t);
+            sampleL += (c1 + c2) * stabEnv * 0.22;
+            sampleR += (c2 + c3) * stabEnv * 0.22;
+          }
+        } else {
+          const arpNotes = [220, 261.63, 329.63, 392.0, 440, 523.25, 659.25, 783.99];
+          const arpFreq = arpNotes[step % 8];
+          if (stepTime < 0.12) {
+            const arpEnv = Math.exp(-stepTime * 18);
+            const pluck = Math.sin(2 * Math.PI * arpFreq * t) * arpEnv * 0.26;
+            sampleL += pluck * (step % 2 === 0 ? 0.85 : 0.35);
+            sampleR += pluck * (step % 2 === 0 ? 0.35 : 0.85);
+          }
+        }
+
+        left[i] = Math.max(-0.95, Math.min(0.95, sampleL * 0.82));
+        right[i] = Math.max(-0.95, Math.min(0.95, sampleR * 0.82));
+      }
+
+      return encodeWAV(left, right, sampleRate);
+    }
+
+    function encodeWAV(left, right, sampleRate) {
+      const numSamples = left.length;
+      const buffer = new ArrayBuffer(44 + numSamples * 4);
+      const view = new DataView(buffer);
+
+      function writeString(offset, string) {
+        for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i));
+      }
+
+      writeString(0, 'RIFF');
+      view.setUint32(4, 36 + numSamples * 4, true);
+      writeString(8, 'WAVE');
+      writeString(12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, 2, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, sampleRate * 4, true);
+      view.setUint16(32, 4, true);
+      view.setUint16(34, 16, true);
+      writeString(36, 'data');
+      view.setUint32(40, numSamples * 4, true);
+
+      let offset = 44;
+      for (let i = 0; i < numSamples; i++) {
+        let sL = Math.max(-1, Math.min(1, left[i]));
+        let sR = Math.max(-1, Math.min(1, right[i]));
+        view.setInt16(offset, sL < 0 ? sL * 0x8000 : sL * 0x7FFF, true);
+        offset += 2;
+        view.setInt16(offset, sR < 0 ? sR * 0x8000 : sR * 0x7FFF, true);
+        offset += 2;
+      }
+      return new Blob([buffer], { type: 'audio/wav' });
+    }
+
+    /**
+     * Procedurally synthesize stereo impulse response buffer for Reverb ConvolverNode
+     */
+    function buildReverbImpulse(ctx, duration = 2.4, decay = 2.2) {
+      const sampleRate = ctx.sampleRate;
+      const length = Math.floor(sampleRate * duration);
+      const impulse = ctx.createBuffer(2, length, sampleRate);
+      const left = impulse.getChannelData(0);
+      const right = impulse.getChannelData(1);
+
+      for (let i = 0; i < length; i++) {
+        const t = i / length;
+        const envelope = Math.pow(1 - t, decay);
+        left[i] = (Math.random() * 2 - 1) * envelope;
+        right[i] = (Math.random() * 2 - 1) * envelope;
+      }
+      return impulse;
+    }
+
+    class DJDeck {
+      constructor(id, color, audioElId) {
+        this.id = id;
+        this.color = color;
+        this.audioEl = document.getElementById(audioElId);
+        this.baseBpm = id === 'deckA' ? 124 : 120;
+        this.cueTime = 0;
+        this.hotCues = [0, 2.0, 4.0];
+        this.isPlaying = false;
+        this.isScratching = false;
+        this.scratchStartAngle = 0;
+        this.scratchStartTime = 0;
+        this.rotationAngle = 0;
+
+        // FX State
+        this.fxActive = false;
+        this.fxMode = 'echo'; // 'echo' | 'reverb' | 'flanger'
+        this.fxWetMix = 0.5;
+        this.fxParam = 0.3; // Echo delay time or Flanger rate or Reverb size
+
+        this.canvas = document.getElementById(`${id}-waveCanvas`);
+        this.canvasCtx = this.canvas.getContext('2d');
+
+        // Audio Nodes
+        this.sourceNode = null;
+        this.eqLow = null;
+        this.eqMid = null;
+        this.eqHigh = null;
+        this.preFxGain = null;
+        this.dryGain = null;
+        this.wetGain = null;
+        this.postFxMixNode = null;
+        this.volNode = null;
+        this.crossfadeGain = null;
+        this.analyser = null;
+
+        // FX Nodes: Echo
+        this.echoDelay = null;
+        this.echoFeedback = null;
+        this.echoFilter = null;
+
+        // FX Nodes: Reverb
+        this.reverbConvolver = null;
+
+        // FX Nodes: Flanger
+        this.flangerDelay = null;
+        this.flangerFeedback = null;
+        this.flangerLfo = null;
+        this.flangerDepth = null;
+
+        // UI Element Cache
+        this.playBtn = document.getElementById(`${id}-playBtn`);
+        this.playIcon = document.getElementById(`${id}-playIcon`);
+        this.playText = document.getElementById(`${id}-playText`);
+        this.cueBtn = document.getElementById(`${id}-cueBtn`);
+        this.syncBtn = document.getElementById(`${id}-syncBtn`);
+        this.bpmText = document.getElementById(`${id}-bpm`);
+        this.timeText = document.getElementById(`${id}-time`);
+        this.pitchSlider = document.getElementById(`${id}-pitchSlider`);
+        this.pitchValText = document.getElementById(`${id}-pitchValue`);
+        this.pitchResetBtn = document.getElementById(`${id}-pitchReset`);
+        this.volSlider = document.getElementById(`${id}-volSlider`);
+        this.platterContainer = document.getElementById(`${id}-platterContainer`);
+        this.vinylEl = document.getElementById(`${id}-vinyl`);
+        this.fileInput = document.getElementById(`${id}-fileInput`);
+        this.trackTitle = document.getElementById(`${id}-trackTitle`);
+        this.progressBar = document.getElementById(`${id}-progress`);
+
+        // FX UI
+        this.fxToggleBtn = document.getElementById(`${id}-fxToggle`);
+        this.fxLed = document.getElementById(`${id}-fxLed`);
+        this.fxToggleText = document.getElementById(`${id}-fxToggleText`);
+        this.fxTabEcho = document.getElementById(`${id}-fxTab-echo`);
+        this.fxTabReverb = document.getElementById(`${id}-fxTab-reverb`);
+        this.fxTabFlanger = document.getElementById(`${id}-fxTab-flanger`);
+        this.fxParamSlider = document.getElementById(`${id}-fxParam`);
+        this.fxMixSlider = document.getElementById(`${id}-fxMix`);
+        this.fxParamLabel = document.getElementById(`${id}-paramLabel`);
+        this.fxParamVal = document.getElementById(`${id}-paramVal`);
+        this.fxMixVal = document.getElementById(`${id}-mixVal`);
+
+        // EQ UI
+        this.eqLowSlider = document.getElementById(`${id}-eqLow`);
+        this.eqMidSlider = document.getElementById(`${id}-eqMid`);
+        this.eqHighSlider = document.getElementById(`${id}-eqHigh`);
+        this.eqLowVal = document.getElementById(`${id}-eqLowVal`);
+        this.eqMidVal = document.getElementById(`${id}-eqMidVal`);
+        this.eqHighVal = document.getElementById(`${id}-eqHighVal`);
+
+        this.initEventListeners();
+      }
+
+      initAudioGraph(ctx, masterGainNode) {
+        if (this.sourceNode) return;
+
+        this.sourceNode = ctx.createMediaElementSource(this.audioEl);
+
+        // 3-Band Biquad Filters
+        this.eqLow = ctx.createBiquadFilter();
+        this.eqLow.type = 'lowshelf';
+        this.eqLow.frequency.value = 180;
+        this.eqLow.gain.value = parseFloat(this.eqLowSlider.value);
+
+        this.eqMid = ctx.createBiquadFilter();
+        this.eqMid.type = 'peaking';
+        this.eqMid.frequency.value = 1000;
+        this.eqMid.Q.value = 1.0;
+        this.eqMid.gain.value = parseFloat(this.eqMidSlider.value);
+
+        this.eqHigh = ctx.createBiquadFilter();
+        this.eqHigh.type = 'highshelf';
+        this.eqHigh.frequency.value = 4000;
+        this.eqHigh.gain.value = parseFloat(this.eqHighSlider.value);
+
+        // FX routing nodes
+        this.preFxGain = ctx.createGain();
+        this.dryGain = ctx.createGain();
+        this.wetGain = ctx.createGain();
+        this.postFxMixNode = ctx.createGain();
+
+        // 1. ECHO ENGINE: Delay with Warm Feedback Loop
+        this.echoDelay = ctx.createDelay(2.0);
+        this.echoDelay.delayTime.value = 0.3; // 300ms default
+        this.echoFeedback = ctx.createGain();
+        this.echoFeedback.gain.value = 0.55;
+        this.echoFilter = ctx.createBiquadFilter();
+        this.echoFilter.type = 'lowpass';
+        this.echoFilter.frequency.value = 2800; // Warm analog tape roll-off
+
+        // Echo feedback cycle
+        this.echoDelay.connect(this.echoFilter);
+        this.echoFilter.connect(this.echoFeedback);
+        this.echoFeedback.connect(this.echoDelay);
+
+        // 2. REVERB ENGINE: Procedural Convolver
+        this.reverbConvolver = ctx.createConvolver();
+        this.reverbConvolver.buffer = buildReverbImpulse(ctx, 2.5, 2.2);
+
+        // 3. FLANGER ENGINE: LFO-modulated short delay with feedback
+        this.flangerDelay = ctx.createDelay(0.1);
+        this.flangerDelay.delayTime.value = 0.005; // 5ms center delay
+        this.flangerFeedback = ctx.createGain();
+        this.flangerFeedback.gain.value = 0.65;
+        this.flangerDelay.connect(this.flangerFeedback);
+        this.flangerFeedback.connect(this.flangerDelay);
+
+        this.flangerLfo = ctx.createOscillator();
+        this.flangerLfo.type = 'sine';
+        this.flangerLfo.frequency.value = 0.8; // 0.8Hz sweep rate
+        this.flangerDepth = ctx.createGain();
+        this.flangerDepth.gain.value = 0.0025; // 2.5ms modulation swing
+
+        this.flangerLfo.connect(this.flangerDepth);
+        this.flangerDepth.connect(this.flangerDelay.delayTime);
+        this.flangerLfo.start();
+
+        // Fader & Crossfader routing
+        this.volNode = ctx.createGain();
+        this.volNode.gain.value = parseFloat(this.volSlider.value);
+        this.crossfadeGain = ctx.createGain();
+
+        this.analyser = ctx.createAnalyser();
+        this.analyser.fftSize = 256;
+        this.analyser.smoothingTimeConstant = 0.8;
+
+        // Wire EQ chain
+        this.sourceNode.connect(this.eqLow);
+        this.eqLow.connect(this.eqMid);
+        this.eqMid.connect(this.eqHigh);
+        this.eqHigh.connect(this.preFxGain);
+
+        // Connect Dry route
+        this.preFxGain.connect(this.dryGain);
+        this.dryGain.connect(this.postFxMixNode);
+
+        // Connect Wet route to master post-mix
+        this.wetGain.connect(this.postFxMixNode);
+
+        // Route chosen FX processor
+        this.wireSelectedFx();
+
+        // Post FX to Volume -> Crossfade -> Analyser -> Master
+        this.postFxMixNode.connect(this.volNode);
+        this.volNode.connect(this.crossfadeGain);
+        this.crossfadeGain.connect(this.analyser);
+        this.analyser.connect(masterGainNode);
+
+        this.updateFxGains();
+      }
+
+      wireSelectedFx() {
+        if (!audioCtx || !this.preFxGain) return;
+
+        try {
+          // Disconnect preFxGain from all wet processors
+          this.preFxGain.disconnect(this.echoDelay);
+          this.preFxGain.disconnect(this.reverbConvolver);
+          this.preFxGain.disconnect(this.flangerDelay);
+
+          this.echoDelay.disconnect(this.wetGain);
+          this.reverbConvolver.disconnect(this.wetGain);
+          this.flangerDelay.disconnect(this.wetGain);
+        } catch (e) {
+          // Ignore initial disconnect errors
+        }
+
+        if (this.fxMode === 'echo') {
+          this.preFxGain.connect(this.echoDelay);
+          this.echoDelay.connect(this.wetGain);
+        } else if (this.fxMode === 'reverb') {
+          this.preFxGain.connect(this.reverbConvolver);
+          this.reverbConvolver.connect(this.wetGain);
+        } else if (this.fxMode === 'flanger') {
+          this.preFxGain.connect(this.flangerDelay);
+          this.flangerDelay.connect(this.wetGain);
+        }
+      }
+
+      updateFxGains() {
+        if (!audioCtx || !this.dryGain || !this.wetGain) return;
+        const now = audioCtx.currentTime;
+        if (!this.fxActive) {
+          this.dryGain.gain.setValueAtTime(1.0, now);
+          this.wetGain.gain.setValueAtTime(0.0, now);
+        } else {
+          // Linear equal-power mix
+          const wet = this.fxWetMix;
+          this.dryGain.gain.setValueAtTime(1.0 - wet * 0.5, now);
+          this.wetGain.gain.setValueAtTime(wet, now);
+        }
+      }
+
+      setFxMode(mode) {
+        this.fxMode = mode;
+        const colorClass = this.id === 'deckA' ? 'bg-cyan-500/30 text-cyan-300 border-cyan-400/50' : 'bg-orange-500/30 text-orange-300 border-orange-400/50';
+        const defaultClass = 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white';
+
+        [this.fxTabEcho, this.fxTabReverb, this.fxTabFlanger].forEach(tab => {
+          tab.className = `py-1 text-[10px] font-tech font-bold rounded border transition ${defaultClass}`;
+        });
+
+        if (mode === 'echo') {
+          this.fxTabEcho.className = `py-1 text-[10px] font-tech font-bold rounded border transition ${colorClass}`;
+          this.fxParamLabel.innerText = "DELAY TIME";
+          this.fxParamSlider.min = 0.05;
+          this.fxParamSlider.max = 0.8;
+          this.fxParamSlider.step = 0.01;
+          this.fxParamSlider.value = this.echoDelay ? this.echoDelay.delayTime.value : 0.3;
+          this.fxParamVal.innerText = `${Math.round(this.fxParamSlider.value * 1000)}ms`;
+        } else if (mode === 'reverb') {
+          this.fxTabReverb.className = `py-1 text-[10px] font-tech font-bold rounded border transition ${colorClass}`;
+          this.fxParamLabel.innerText = "ROOM DECAY";
+          this.fxParamSlider.min = 1.0;
+          this.fxParamSlider.max = 4.5;
+          this.fxParamSlider.step = 0.1;
+          this.fxParamSlider.value = 2.4;
+          this.fxParamVal.innerText = `${this.fxParamSlider.value}s`;
+        } else if (mode === 'flanger') {
+          this.fxTabFlanger.className = `py-1 text-[10px] font-tech font-bold rounded border transition ${colorClass}`;
+          this.fxParamLabel.innerText = "SWEEP RATE";
+          this.fxParamSlider.min = 0.1;
+          this.fxParamSlider.max = 4.0;
+          this.fxParamSlider.step = 0.05;
+          this.fxParamSlider.value = this.flangerLfo ? this.flangerLfo.frequency.value : 0.8;
+          this.fxParamVal.innerText = `${parseFloat(this.fxParamSlider.value).toFixed(1)}Hz`;
+        }
+
+        this.wireSelectedFx();
+        showToast(`${this.id === 'deckA' ? 'DECK A' : 'DECK B'}: ${mode.toUpperCase()} Selected`, this.id === 'deckB');
+      }
+
+      toggleFx() {
+        getAudioContext();
+        this.fxActive = !this.fxActive;
+        if (this.fxActive) {
+          this.fxToggleBtn.classList.remove('bg-slate-800', 'text-slate-400');
+          this.fxToggleBtn.classList.add(this.id === 'deckA' ? 'bg-cyan-950' : 'bg-orange-950', this.id === 'deckA' ? 'text-cyan-300' : 'text-orange-300', this.id === 'deckA' ? 'border-cyan-400' : 'border-orange-400');
+          this.fxLed.classList.remove('bg-slate-600');
+          this.fxLed.classList.add(this.id === 'deckA' ? 'bg-cyan-400' : 'bg-orange-400', 'animate-pulse');
+          this.fxToggleText.innerText = "FX ON";
+          showToast(`⚡ ${this.id === 'deckA' ? 'DECK A' : 'DECK B'} ${this.fxMode.toUpperCase()} ON`, this.id === 'deckB');
+        } else {
+          this.fxToggleBtn.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider border border-slate-700 bg-slate-800 text-slate-400 transition flex items-center gap-1";
+          this.fxLed.className = "w-1.5 h-1.5 rounded-full bg-slate-600";
+          this.fxToggleText.innerText = "FX OFF";
+          showToast(`${this.id === 'deckA' ? 'DECK A' : 'DECK B'} FX Bypass`, this.id === 'deckB');
+        }
+        this.updateFxGains();
+      }
+
+      initEventListeners() {
+        // File Upload
+        this.fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const url = URL.createObjectURL(file);
+            this.audioEl.src = url;
+            this.trackTitle.innerText = file.name.replace(/\.[^/.]+$/, "");
+            this.trackTitle.title = file.name;
+            showToast(`${this.id === 'deckA' ? 'DECK A' : 'DECK B'}: ${file.name}`, this.id === 'deckB');
+          }
+        });
+
+        // Transport
+        this.playBtn.addEventListener('click', () => {
+          getAudioContext();
+          this.togglePlay();
+        });
+
+        this.cueBtn.addEventListener('click', () => {
+          getAudioContext();
+          if (this.isPlaying) {
+            this.pause();
+            this.audioEl.currentTime = this.cueTime;
+          } else {
+            this.cueTime = this.audioEl.currentTime;
+            showToast(`CUE Set: ${this.cueTime.toFixed(1)}s`, this.id === 'deckB');
+          }
+        });
+
+        // Pitch slider
+        this.pitchSlider.addEventListener('input', (e) => {
+          const rate = parseFloat(e.target.value);
+          this.audioEl.playbackRate = rate;
+          const pct = ((rate - 1.0) * 100).toFixed(1);
+          this.pitchValText.innerText = (pct > 0 ? `+${pct}` : `${pct}`) + '%';
+          const dynamicBpm = (this.baseBpm * rate).toFixed(1);
+          this.bpmText.innerText = `${dynamicBpm} BPM`;
+        });
+
+        this.pitchResetBtn.addEventListener('click', () => {
+          this.pitchSlider.value = 1.0;
+          this.audioEl.playbackRate = 1.0;
+          this.pitchValText.innerText = '0.0%';
+          this.bpmText.innerText = `${this.baseBpm.toFixed(1)} BPM`;
+        });
+
+        // FX Controls
+        this.fxToggleBtn.addEventListener('click', () => this.toggleFx());
+        this.fxTabEcho.addEventListener('click', () => this.setFxMode('echo'));
+        this.fxTabReverb.addEventListener('click', () => this.setFxMode('reverb'));
+        this.fxTabFlanger.addEventListener('click', () => this.setFxMode('flanger'));
+
+        this.fxMixSlider.addEventListener('input', (e) => {
+          this.fxWetMix = parseFloat(e.target.value);
+          this.fxMixVal.innerText = `${Math.round(this.fxWetMix * 100)}%`;
+          this.updateFxGains();
+        });
+
+        this.fxParamSlider.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value);
+          if (this.fxMode === 'echo') {
+            this.fxParamVal.innerText = `${Math.round(val * 1000)}ms`;
+            if (this.echoDelay && audioCtx) this.echoDelay.delayTime.setValueAtTime(val, audioCtx.currentTime);
+          } else if (this.fxMode === 'reverb') {
+            this.fxParamVal.innerText = `${val.toFixed(1)}s`;
+            if (audioCtx) {
+              this.reverbConvolver.buffer = buildReverbImpulse(audioCtx, val, 2.2);
+            }
+          } else if (this.fxMode === 'flanger') {
+            this.fxParamVal.innerText = `${val.toFixed(1)}Hz`;
+            if (this.flangerLfo && audioCtx) this.flangerLfo.frequency.setValueAtTime(val, audioCtx.currentTime);
+          }
+        });
+
+        // EQ
+        this.volSlider.addEventListener('input', (e) => {
+          if (this.volNode && audioCtx) this.volNode.gain.setValueAtTime(parseFloat(e.target.value), audioCtx.currentTime);
+        });
+
+        this.eqHighSlider.addEventListener('input', (e) => {
+          const v = parseFloat(e.target.value);
+          this.eqHighVal.innerText = `${v > 0 ? '+' : ''}${v}dB`;
+          if (this.eqHigh && audioCtx) this.eqHigh.gain.setValueAtTime(v, audioCtx.currentTime);
+        });
+
+        this.eqMidSlider.addEventListener('input', (e) => {
+          const v = parseFloat(e.target.value);
+          this.eqMidVal.innerText = `${v > 0 ? '+' : ''}${v}dB`;
+          if (this.eqMid && audioCtx) this.eqMid.gain.setValueAtTime(v, audioCtx.currentTime);
+        });
+
+        this.eqLowSlider.addEventListener('input', (e) => {
+          const v = parseFloat(e.target.value);
+          this.eqLowVal.innerText = `${v > 0 ? '+' : ''}${v}dB`;
+          if (this.eqLow && audioCtx) this.eqLow.gain.setValueAtTime(v, audioCtx.currentTime);
+        });
+
+        // Hot Cues
+        for (let i = 1; i <= 3; i++) {
+          const btn = document.getElementById(`${this.id}-hotcue${i}`);
+          if (btn) {
+            btn.addEventListener('click', () => {
+              getAudioContext();
+              const target = this.hotCues[i - 1];
+              if (this.audioEl.duration && target < this.audioEl.duration) {
+                this.audioEl.currentTime = target;
+                if (!this.isPlaying) this.play();
+              }
+            });
+          }
+        }
+
+        this.audioEl.addEventListener('timeupdate', () => this.updateTimeDisplay());
+
+        // Scratch Touch/Mouse Logic
+        const startScratch = (clientX, clientY) => {
+          getAudioContext();
+          this.isScratching = true;
+          this.wasPlaying = this.isPlaying;
+          if (this.isPlaying) this.audioEl.pause();
+
+          const rect = this.platterContainer.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          this.scratchStartAngle = Math.atan2(clientY - cy, clientX - cx);
+        };
+
+        const moveScratch = (clientX, clientY) => {
+          if (!this.isScratching) return;
+          const rect = this.platterContainer.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const currentAngle = Math.atan2(clientY - cy, clientX - cx);
+          let delta = currentAngle - this.scratchStartAngle;
+
+          if (delta > Math.PI) delta -= 2 * Math.PI;
+          if (delta < -Math.PI) delta += 2 * Math.PI;
+
+          this.rotationAngle += delta * (180 / Math.PI);
+          this.vinylEl.style.transform = `rotate(${this.rotationAngle}deg)`;
+
+          if (this.audioEl.duration) {
+            const timeOffset = delta * 0.45;
+            let nTime = this.audioEl.currentTime + timeOffset;
+            if (nTime < 0) nTime = 0;
+            if (nTime > this.audioEl.duration) nTime = this.audioEl.duration;
+            this.audioEl.currentTime = nTime;
+          }
+          this.scratchStartAngle = currentAngle;
+        };
+
+        const endScratch = () => {
+          if (this.isScratching) {
+            this.isScratching = false;
+            if (this.wasPlaying) this.play();
+          }
+        };
+
+        this.platterContainer.addEventListener('mousedown', (e) => {
+          startScratch(e.clientX, e.clientY);
+          const onMM = (ev) => moveScratch(ev.clientX, ev.clientY);
+          const onMU = () => {
+            endScratch();
+            window.removeEventListener('mousemove', onMM);
+            window.removeEventListener('mouseup', onMU);
+          };
+          window.addEventListener('mousemove', onMM);
+          window.addEventListener('mouseup', onMU);
+        });
+
+        this.platterContainer.addEventListener('touchstart', (e) => {
+          if (e.touches.length > 0) startScratch(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+
+        this.platterContainer.addEventListener('touchmove', (e) => {
+          if (e.touches.length > 0) moveScratch(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+
+        this.platterContainer.addEventListener('touchend', endScratch);
+      }
+
+      togglePlay() {
+        if (this.isPlaying) this.pause();
+        else this.play();
+      }
+
+      play() {
+        this.audioEl.play().then(() => {
+          this.isPlaying = true;
+          this.playBtn.classList.add(this.id === 'deckA' ? 'led-cyan' : 'led-orange');
+          this.playText.innerText = 'PAUSE';
+          this.playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        }).catch(err => console.warn(err));
+      }
+
+      pause() {
+        this.audioEl.pause();
+        this.isPlaying = false;
+        this.playBtn.classList.remove('led-cyan', 'led-orange');
+        this.playText.innerText = 'PLAY';
+        this.playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      }
+
+      updateTimeDisplay() {
+        const cur = this.audioEl.currentTime || 0;
+        const dur = this.audioEl.duration || 0;
+        const fmt = (s) => {
+          const m = Math.floor(s / 60);
+          const sc = Math.floor(s % 60);
+          return `${m < 10 ? '0' : ''}${m}:${sc < 10 ? '0' : ''}${sc}`;
+        };
+        this.timeText.innerText = `${fmt(cur)} / ${fmt(dur)}`;
+        if (dur > 0) {
+          const pct = (cur / dur) * 100;
+          this.progressBar.style.left = `${pct}%`;
+        }
+      }
+    }
+
+    class DJMixer {
+      constructor() {
+        this.masterVolumeSlider = document.getElementById('masterVolume');
+        this.masterVolText = document.getElementById('masterVolText');
+        this.crossfaderSlider = document.getElementById('crossfader');
+        this.cfLeftBtn = document.getElementById('cfLeft');
+        this.cfCenterBtn = document.getElementById('cfCenter');
+        this.cfRightBtn = document.getElementById('cfRight');
+
+        this.deckA = new DJDeck('deckA', '#00f2fe', 'audioA');
+        this.deckB = new DJDeck('deckB', '#ff5e36', 'audioB');
+
+        this.masterGain = null;
+        this.initMixer();
+      }
+
+      initMixer() {
+        this.masterVolumeSlider.addEventListener('input', (e) => {
+          const val = parseFloat(e.target.value);
+          this.masterVolText.innerText = `${Math.round(val * 100)}%`;
+          if (this.masterGain && audioCtx) this.masterGain.gain.setValueAtTime(val, audioCtx.currentTime);
+        });
+
+        this.crossfaderSlider.addEventListener('input', () => this.updateCrossfader());
+        this.cfLeftBtn.addEventListener('click', () => { this.crossfaderSlider.value = 0; this.updateCrossfader(); });
+        this.cfCenterBtn.addEventListener('click', () => { this.crossfaderSlider.value = 0.5; this.updateCrossfader(); });
+        this.cfRightBtn.addEventListener('click', () => { this.crossfaderSlider.value = 1; this.updateCrossfader(); });
+
+        // BPM SYNC Handlers
+        this.deckA.syncBtn.addEventListener('click', () => {
+          const targetBpm = parseFloat(this.deckB.bpmText.innerText);
+          const neededRate = targetBpm / this.deckA.baseBpm;
+          this.deckA.pitchSlider.value = neededRate;
+          this.deckA.audioEl.playbackRate = neededRate;
+          const pct = ((neededRate - 1.0) * 100).toFixed(1);
+          this.deckA.pitchValText.innerText = (pct > 0 ? `+${pct}` : `${pct}`) + '%';
+          this.deckA.bpmText.innerText = `${targetBpm.toFixed(1)} BPM`;
+          showToast(`⚡ Deck A Synced to ${targetBpm.toFixed(1)} BPM`);
+        });
+
+        this.deckB.syncBtn.addEventListener('click', () => {
+          const targetBpm = parseFloat(this.deckA.bpmText.innerText);
+          const neededRate = targetBpm / this.deckB.baseBpm;
+          this.deckB.pitchSlider.value = neededRate;
+          this.deckB.audioEl.playbackRate = neededRate;
+          const pct = ((neededRate - 1.0) * 100).toFixed(1);
+          this.deckB.pitchValText.innerText = (pct > 0 ? `+${pct}` : `${pct}`) + '%';
+          this.deckB.bpmText.innerText = `${targetBpm.toFixed(1)} BPM`;
+          showToast(`⚡ Deck B Synced to ${targetBpm.toFixed(1)} BPM`, true);
+        });
+
+        // Sampler Buttons
+        document.getElementById('sfx-airhorn').addEventListener('click', () => this.playAirHorn());
+        document.getElementById('sfx-laser').addEventListener('click', () => this.playLaser());
+        document.getElementById('sfx-subbomb').addEventListener('click', () => this.playSubBomb());
+        document.getElementById('sfx-siren').addEventListener('click', () => this.playSiren());
+
+        document.getElementById('btnQuickDemo').addEventListener('click', () => {
+          this.loadDemoLoops();
+          showToast("Regenerated Synth Grooves!");
+        });
+
+        // Keyboard Shortcuts
+        window.addEventListener('keydown', (e) => {
+          if (e.target.tagName === 'INPUT') return;
+          if (e.code === 'Space') {
+            e.preventDefault();
+            this.deckA.togglePlay();
+          } else if (e.code === 'Enter') {
+            e.preventDefault();
+            this.deckB.togglePlay();
+          } else if (e.code === 'KeyE') {
+            e.preventDefault();
+            this.deckA.toggleFx();
+          } else if (e.code === 'KeyO') {
+            e.preventDefault();
+            this.deckB.toggleFx();
+          } else if (e.code === 'ArrowLeft') {
+            e.preventDefault();
+            this.crossfaderSlider.value = Math.max(0, parseFloat(this.crossfaderSlider.value) - 0.1);
+            this.updateCrossfader();
+          } else if (e.code === 'ArrowRight') {
+            e.preventDefault();
+            this.crossfaderSlider.value = Math.min(1, parseFloat(this.crossfaderSlider.value) + 0.1);
+            this.updateCrossfader();
+          }
+        });
+
+        window.addEventListener('resize', () => this.resizeCanvases());
+
+        const startAudio = () => {
+          this.setupAudioGraph();
+          window.removeEventListener('click', startAudio);
+          window.removeEventListener('keydown', startAudio);
+          window.removeEventListener('touchstart', startAudio);
+        };
+        window.addEventListener('click', startAudio);
+        window.addEventListener('keydown', startAudio);
+        window.addEventListener('touchstart', startAudio);
+
+        this.loadDemoLoops();
+        this.resizeCanvases();
+        this.startRenderLoop();
+      }
+
+      updateCrossfader() {
+        if (!audioCtx || !this.deckA.crossfadeGain || !this.deckB.crossfadeGain) return;
+        const x = parseFloat(this.crossfaderSlider.value);
+        // Cosine/Sine Equal-power curves
+        const gainA = Math.cos(x * 0.5 * Math.PI);
+        const gainB = Math.cos((1.0 - x) * 0.5 * Math.PI);
+        const now = audioCtx.currentTime;
+        this.deckA.crossfadeGain.gain.setValueAtTime(gainA, now);
+        this.deckB.crossfadeGain.gain.setValueAtTime(gainB, now);
+      }
+
+      setupAudioGraph() {
+        const ctx = getAudioContext();
+        if (!this.masterGain) {
+          this.masterGain = ctx.createGain();
+          this.masterGain.gain.value = parseFloat(this.masterVolumeSlider.value);
+          this.masterGain.connect(ctx.destination);
+
+          this.deckA.initAudioGraph(ctx, this.masterGain);
+          this.deckB.initAudioGraph(ctx, this.masterGain);
+          this.updateCrossfader();
+        }
+      }
+
+      loadDemoLoops() {
+        try {
+          const wA = createSynthDJLoop('A');
+          const wB = createSynthDJLoop('B');
+          this.deckA.audioEl.src = URL.createObjectURL(wA);
+          this.deckB.audioEl.src = URL.createObjectURL(wB);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      resizeCanvases() {
+        [this.deckA, this.deckB].forEach(deck => {
+          const rect = deck.canvas.getBoundingClientRect();
+          deck.canvas.width = rect.width * (window.devicePixelRatio || 1);
+          deck.canvas.height = rect.height * (window.devicePixelRatio || 1);
+        });
+      }
+
+      playAirHorn() {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const freqs = [370, 370, 370, 440, 554];
+        const times = [0, 0.12, 0.24, 0.38, 0.52];
+        times.forEach((t, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freqs[i] || 440, now + t);
+          gain.gain.setValueAtTime(0.35, now + t);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + t + 0.12);
+          osc.connect(gain);
+          gain.connect(this.masterGain || ctx.destination);
+          osc.start(now + t);
+          osc.stop(now + t + 0.14);
+        });
+        showToast("📢 AIR HORN FIRED!");
+      }
+
+      playLaser() {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(1600, now);
+        osc.frequency.exponentialRampToValueAtTime(70, now + 0.34);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.34);
+        osc.connect(gain);
+        gain.connect(this.masterGain || ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
+        showToast("⚡ LASER SHOT!");
+      }
+
+      playSubBomb() {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(130, now);
+        osc.frequency.exponentialRampToValueAtTime(32, now + 1.2);
+        gain.gain.setValueAtTime(0.85, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+        osc.connect(gain);
+        gain.connect(this.masterGain || ctx.destination);
+        osc.start(now);
+        osc.stop(now + 1.25);
+        showToast("💣 808 SUB DROP!");
+      }
+
+      playSiren() {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.linearRampToValueAtTime(950, now + 0.3);
+        osc.frequency.linearRampToValueAtTime(600, now + 0.6);
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.65);
+        osc.connect(gain);
+        gain.connect(this.masterGain || ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.7);
+        showToast("🚨 SIREN SOUNDED!");
+      }
+
+      startRenderLoop() {
+        const render = () => {
+          this.drawVisualizer(this.deckA, '#00f2fe');
+          this.drawVisualizer(this.deckB, '#ff5e36');
+          this.updateVUMeters(this.deckA, 'deckA');
+          this.updateVUMeters(this.deckB, 'deckB');
+
+          // Spin vinyl
+          [this.deckA, this.deckB].forEach(deck => {
+            if (deck.isPlaying && !deck.isScratching) {
+              const speed = (deck.audioEl.playbackRate || 1.0) * 1.8;
+              deck.rotationAngle = (deck.rotationAngle + speed) % 360;
+              deck.vinylEl.style.transform = `rotate(${deck.rotationAngle}deg)`;
+            }
+          });
+          requestAnimationFrame(render);
+        };
+        requestAnimationFrame(render);
+      }
+
+      drawVisualizer(deck, strokeColor) {
+        const canvas = deck.canvas;
+        const ctx = deck.canvasCtx;
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.fillStyle = '#05070a';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, h / 2);
+        ctx.lineTo(w, h / 2);
+        ctx.stroke();
+
+        if (!deck.analyser || !deck.isPlaying) {
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          for (let x = 0; x < w; x += 4) {
+            const y = h / 2 + Math.sin(x * 0.05 + Date.now() * 0.003) * 2;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+          return;
+        }
+
+        const bufferLength = deck.analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        deck.analyser.getByteTimeDomainData(dataArray);
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = strokeColor;
+        ctx.beginPath();
+        const sliceWidth = w / bufferLength;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] / 128.0;
+          const y = (v * h) / 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+        ctx.lineTo(w, h / 2);
+        ctx.stroke();
+      }
+
+      updateVUMeters(deck, prefix) {
+        let level = 0;
+        if (deck.analyser && deck.isPlaying) {
+          const bufferLength = deck.analyser.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+          deck.analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
+          level = (sum / bufferLength) / 255;
+        }
+        level *= parseFloat(deck.volSlider.value);
+
+        const g1 = document.getElementById(`${prefix}-vu-green1`);
+        const g2 = document.getElementById(`${prefix}-vu-green2`);
+        const g3 = document.getElementById(`${prefix}-vu-green3`);
+        const yl = document.getElementById(`${prefix}-vu-yellow`);
+        const rd = document.getElementById(`${prefix}-vu-red`);
+
+        const setCol = (el, activeColor, dimColor, condition) => {
+          el.className = condition ? el.className.replace(dimColor, activeColor) : el.className.replace(activeColor, dimColor);
+        };
+
+        setCol(g1, 'bg-emerald-400', 'bg-emerald-950', level > 0.04);
+        setCol(g2, 'bg-emerald-400', 'bg-emerald-950', level > 0.22);
+        setCol(g3, 'bg-emerald-400', 'bg-emerald-950', level > 0.48);
+        setCol(yl, 'bg-yellow-400', 'bg-yellow-950', level > 0.72);
+        setCol(rd, 'bg-red-500 shadow-[0_0_8px_#ef4444]', 'bg-red-950', level > 0.88);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.vortexMixer = new DJMixer();
+    });
+  </script>
+</body>
+</html>
